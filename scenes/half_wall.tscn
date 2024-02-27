@@ -1,0 +1,46 @@
+[gd_scene load_steps=7 format=3 uid="uid://bbtnb2nbq8qx4"]
+
+[ext_resource type="Script" path="res://scenes/placeable.gd" id="1_vk1wj"]
+[ext_resource type="PackedScene" uid="uid://c0nj6werywts8" path="res://models/half_wall.glb" id="2_jnnow"]
+[ext_resource type="PackedScene" uid="uid://bsr4lnek74pc5" path="res://scenes/snap_point.tscn" id="3_t4a76"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qghvu"]
+size = Vector3(0.2, 1, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_brmeb"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 0.796078, 0, 0.313726)
+
+[sub_resource type="SphereMesh" id="SphereMesh_tgk33"]
+radius = 0.25
+height = 0.5
+
+[node name="half_wall" type="CharacterBody3D"]
+script = ExtResource("1_vk1wj")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+shape = SubResource("BoxShape3D_qghvu")
+disabled = true
+
+[node name="half_wall" parent="." instance=ExtResource("2_jnnow")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+
+[node name="snap_points" type="Node3D" parent="."]
+
+[node name="snap_bottom_left" parent="snap_points" instance=ExtResource("3_t4a76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -0.5, 0)
+
+[node name="snap_bottom_right" parent="snap_points" instance=ExtResource("3_t4a76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -0.5, 0)
+
+[node name="snap_top_right" parent="snap_points" instance=ExtResource("3_t4a76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.5, 0)
+
+[node name="snap_top_left" parent="snap_points" instance=ExtResource("3_t4a76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.5, 0)
+
+[node name="marker2" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_brmeb")
+mesh = SubResource("SphereMesh_tgk33")

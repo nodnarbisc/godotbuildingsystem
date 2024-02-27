@@ -1,0 +1,4 @@
+res://scenes/level.tscn
+res://materials/placing_material.tres
+res://scenes/floor.tscn
+res://scenes/wall.tscn

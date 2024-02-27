@@ -1,0 +1,47 @@
+[gd_scene load_steps=7 format=3 uid="uid://bxmdsq8l3c4b8"]
+
+[ext_resource type="Script" path="res://scenes/placeable.gd" id="1_f6i4l"]
+[ext_resource type="PackedScene" uid="uid://crewtw5gsvvk6" path="res://models/floor.glb" id="2_1wk7p"]
+[ext_resource type="PackedScene" uid="uid://bsr4lnek74pc5" path="res://scenes/snap_point.tscn" id="3_atdix"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_b8e3h"]
+size = Vector3(1.99743, 0.193376, 2.00058)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jm3cl"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 0.796078, 0, 0.313726)
+
+[sub_resource type="SphereMesh" id="SphereMesh_5e3wk"]
+radius = 0.25
+height = 0.5
+
+[node name="floor" type="CharacterBody3D"]
+script = ExtResource("1_f6i4l")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_b8e3h")
+disabled = true
+
+[node name="floor" parent="." instance=ExtResource("2_1wk7p")]
+
+[node name="snap_points" type="Node3D" parent="."]
+
+[node name="snap_bottom_left" parent="snap_points" instance=ExtResource("3_atdix")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, -1)
+
+[node name="snap_bottom__right" parent="snap_points" instance=ExtResource("3_atdix")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1)
+
+[node name="snap_top_right" parent="snap_points" instance=ExtResource("3_atdix")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -1)
+
+[node name="snap_top_left" parent="snap_points" instance=ExtResource("3_atdix")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 1)
+
+[node name="snap_origin" parent="snap_points" instance=ExtResource("3_atdix")]
+
+[node name="marker2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+material_override = SubResource("StandardMaterial3D_jm3cl")
+mesh = SubResource("SphereMesh_5e3wk")

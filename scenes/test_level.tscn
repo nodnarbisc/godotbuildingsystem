@@ -1,0 +1,222 @@
+[gd_scene load_steps=23 format=3 uid="uid://pl30l634qlh6"]
+
+[ext_resource type="PackedScene" uid="uid://dgot2igb2jvs6" path="res://scenes/basic_player/basic_player.tscn" id="1_nbkxm"]
+[ext_resource type="Script" path="res://scripts/building_manager.gd" id="2_hjoi8"]
+[ext_resource type="Script" path="res://scenes/build_button.gd" id="3_6qs40"]
+[ext_resource type="PackedScene" uid="uid://buljlj6wjm2q8" path="res://models/wall.glb" id="3_lo0na"]
+[ext_resource type="PackedScene" uid="uid://bxmdsq8l3c4b8" path="res://scenes/floor.tscn" id="4_63cb6"]
+[ext_resource type="PackedScene" uid="uid://cudhfx8ljv72e" path="res://scenes/wall.tscn" id="5_xl53g"]
+[ext_resource type="PackedScene" uid="uid://dpui8vr8emwtg" path="res://scenes/doorway.tscn" id="6_ht8pb"]
+[ext_resource type="PackedScene" uid="uid://br68va6gokdv3" path="res://scenes/ramp.tscn" id="7_pwblb"]
+[ext_resource type="PackedScene" uid="uid://c8ukbkmtflju8" path="res://scenes/half_ramp.tscn" id="8_c5qi5"]
+[ext_resource type="PackedScene" uid="uid://bbtnb2nbq8qx4" path="res://scenes/half_wall.tscn" id="9_6iv1k"]
+[ext_resource type="PackedScene" uid="uid://cv1nlavu5hyft" path="res://scenes/half_triangle_wall.tscn" id="10_koxhe"]
+[ext_resource type="PackedScene" uid="uid://b02wvga18kbbn" path="res://scenes/triangle_wall.tscn" id="11_8veaq"]
+[ext_resource type="PackedScene" uid="uid://cklry2p65kq6p" path="res://scenes/quarter_wall.tscn" id="12_f72p5"]
+[ext_resource type="PackedScene" uid="uid://bqfdasi644grl" path="res://scenes/pillar.tscn" id="13_6rw5v"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hw6rf"]
+albedo_color = Color(0.517647, 0.690196, 0.243137, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_iygas"]
+size = Vector3(50, 1, 50)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kujnx"]
+size = Vector3(50, 1, 50)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_44mc5"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_keqyj"]
+sky_material = SubResource("ProceduralSkyMaterial_44mc5")
+
+[sub_resource type="Environment" id="Environment_vq2yt"]
+background_mode = 2
+sky = SubResource("Sky_keqyj")
+tonemap_mode = 2
+ssao_enabled = true
+glow_enabled = true
+
+[sub_resource type="LabelSettings" id="LabelSettings_kwfn5"]
+font_size = 32
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_0cdai"]
+font_size = 15
+outline_size = 3
+outline_color = Color(0, 0, 0, 1)
+
+[node name="test level" type="Node3D"]
+
+[node name="ground" type="StaticBody3D" parent="." groups=["ground"]]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ground"]
+material_override = SubResource("StandardMaterial3D_hw6rf")
+mesh = SubResource("BoxMesh_iygas")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ground"]
+shape = SubResource("BoxShape3D_kujnx")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_vq2yt")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866024, -0.433016, 0.250001, 0, 0.499998, 0.866026, -0.500003, 0.749999, -0.43301, 1.18701, 14.6575, -0.915946)
+shadow_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("1_nbkxm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.77856, 0.334607, 0.582254)
+
+[node name="RayCast3D" parent="Player/camera_pivot/Camera3D" index="0"]
+collide_with_areas = false
+
+[node name="building_manager" type="Node" parent="." node_paths=PackedStringArray("ray")]
+unique_name_in_owner = true
+script = ExtResource("2_hjoi8")
+ray = NodePath("../Player/camera_pivot/Camera3D/RayCast3D")
+default_buid_piece = ExtResource("3_lo0na")
+
+[node name="Label" type="Label" parent="building_manager"]
+offset_left = 15.0
+offset_top = 10.0
+offset_right = 279.0
+offset_bottom = 58.0
+label_settings = SubResource("LabelSettings_kwfn5")
+
+[node name="Label" type="Label" parent="building_manager/Label"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 41.0
+offset_right = 140.0
+offset_bottom = 85.0
+text = "Q/E: change snap points
+"
+label_settings = SubResource("LabelSettings_0cdai")
+
+[node name="build_menu" type="CenterContainer" parent="building_manager"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="building_manager/build_menu"]
+custom_minimum_size = Vector2(500, 300)
+layout_mode = 2
+
+[node name="HBoxContainer" type="VBoxContainer" parent="building_manager/build_menu/PanelContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="floor" type="Button" parent="building_manager/build_menu/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_mode = 0
+text = "Floor"
+script = ExtResource("3_6qs40")
+build_piece = ExtResource("4_63cb6")
+
+[node name="wall" type="Button" parent="building_manager/build_menu/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_mode = 0
+text = "Wall"
+script = ExtResource("3_6qs40")
+build_piece = ExtResource("5_xl53g")
+
+[node name="doorway" type="Button" parent="building_manager/build_menu/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_mode = 0
+text = "Doorway
+"
+script = ExtResource("3_6qs40")
+build_piece = ExtResource("6_ht8pb")
+
+[node name="ramp" type="Button" parent="building_manager/build_menu/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_mode = 0
+text = "Ramp
+"
+script = ExtResource("3_6qs40")
+build_piece = ExtResource("7_pwblb")
+
+[node name="half ramp" type="Button" parent="building_manager/build_menu/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_mode = 0
+text = "Half Ramp
+"
+script = ExtResource("3_6qs40")
+build_piece = ExtResource("8_c5qi5")
+
+[node name="half wall" type="Button" parent="building_manager/build_menu/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_mode = 0
+text = "Half Wall
+"
+script = ExtResource("3_6qs40")
+build_piece = ExtResource("9_6iv1k")
+
+[node name="half triangle wall" type="Button" parent="building_manager/build_menu/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_mode = 0
+text = "Half Triangle Wall
+"
+script = ExtResource("3_6qs40")
+build_piece = ExtResource("10_koxhe")
+
+[node name="triangle wall" type="Button" parent="building_manager/build_menu/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_mode = 0
+text = "Triangle Wall
+"
+script = ExtResource("3_6qs40")
+build_piece = ExtResource("11_8veaq")
+
+[node name="quarter wall" type="Button" parent="building_manager/build_menu/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_mode = 0
+text = "Quarter Wall
+"
+script = ExtResource("3_6qs40")
+build_piece = ExtResource("12_f72p5")
+
+[node name="pillar" type="Button" parent="building_manager/build_menu/PanelContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_mode = 0
+text = "Pillar
+"
+script = ExtResource("3_6qs40")
+build_piece = ExtResource("13_6rw5v")
+
+[connection signal="pressed" from="building_manager/build_menu/PanelContainer/HBoxContainer/floor" to="building_manager/build_menu/PanelContainer/HBoxContainer/floor" method="_on_pressed"]
+[connection signal="pressed" from="building_manager/build_menu/PanelContainer/HBoxContainer/wall" to="building_manager/build_menu/PanelContainer/HBoxContainer/wall" method="_on_pressed"]
+[connection signal="pressed" from="building_manager/build_menu/PanelContainer/HBoxContainer/doorway" to="building_manager/build_menu/PanelContainer/HBoxContainer/doorway" method="_on_pressed"]
+[connection signal="pressed" from="building_manager/build_menu/PanelContainer/HBoxContainer/ramp" to="building_manager/build_menu/PanelContainer/HBoxContainer/ramp" method="_on_pressed"]
+[connection signal="pressed" from="building_manager/build_menu/PanelContainer/HBoxContainer/half ramp" to="building_manager/build_menu/PanelContainer/HBoxContainer/half ramp" method="_on_pressed"]
+[connection signal="pressed" from="building_manager/build_menu/PanelContainer/HBoxContainer/half wall" to="building_manager/build_menu/PanelContainer/HBoxContainer/half wall" method="_on_pressed"]
+[connection signal="pressed" from="building_manager/build_menu/PanelContainer/HBoxContainer/half triangle wall" to="building_manager/build_menu/PanelContainer/HBoxContainer/half triangle wall" method="_on_pressed"]
+[connection signal="pressed" from="building_manager/build_menu/PanelContainer/HBoxContainer/triangle wall" to="building_manager/build_menu/PanelContainer/HBoxContainer/triangle wall" method="_on_pressed"]
+[connection signal="pressed" from="building_manager/build_menu/PanelContainer/HBoxContainer/quarter wall" to="building_manager/build_menu/PanelContainer/HBoxContainer/quarter wall" method="_on_pressed"]
+[connection signal="pressed" from="building_manager/build_menu/PanelContainer/HBoxContainer/pillar" to="building_manager/build_menu/PanelContainer/HBoxContainer/pillar" method="_on_pressed"]
+
+[editable path="Player"]

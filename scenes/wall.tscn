@@ -1,0 +1,51 @@
+[gd_scene load_steps=7 format=3 uid="uid://3f5x6lne70rm"]
+
+[ext_resource type="Script" path="res://scenes/placeable.gd" id="2_j5hnr"]
+[ext_resource type="PackedScene" uid="uid://buljlj6wjm2q8" path="res://models/wall.glb" id="2_pqbwr"]
+[ext_resource type="PackedScene" uid="uid://bsr4lnek74pc5" path="res://scenes/snap_point.tscn" id="3_wa4ei"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pfvjn"]
+size = Vector3(2, 2, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_brmeb"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 0.796078, 0, 0.313726)
+
+[sub_resource type="SphereMesh" id="SphereMesh_tgk33"]
+radius = 0.25
+height = 0.5
+
+[node name="wall2" type="CharacterBody3D"]
+script = ExtResource("2_j5hnr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_pfvjn")
+disabled = true
+
+[node name="wall" parent="." instance=ExtResource("2_pqbwr")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+
+[node name="marker2" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_brmeb")
+mesh = SubResource("SphereMesh_tgk33")
+
+[node name="nametag" type="Label3D" parent="."]
+billboard = 1
+no_depth_test = true
+text = "Wall 1"
+font_size = 24
+
+[node name="snap_points" type="Node3D" parent="."]
+
+[node name="snap_bottom_left" parent="snap_points" instance=ExtResource("3_wa4ei")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -1, 0)
+
+[node name="snap_bottom_right" parent="snap_points" instance=ExtResource("3_wa4ei")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -1, 0)
+
+[node name="snap_top_right" parent="snap_points" instance=ExtResource("3_wa4ei")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0)
+
+[node name="snap_top_left" parent="snap_points" instance=ExtResource("3_wa4ei")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1, 0)

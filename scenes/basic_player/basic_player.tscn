@@ -1,0 +1,56 @@
+[gd_scene load_steps=6 format=3 uid="uid://dgot2igb2jvs6"]
+
+[ext_resource type="Script" path="res://scenes/basic_player/player.gd" id="1_yuleg"]
+[ext_resource type="Script" path="res://scenes/basic_player/smooth_follow.gd" id="2_mr7xn"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_w65l1"]
+radius = 0.4
+height = 1.5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_vhqd1"]
+radius = 0.4
+height = 1.5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_753co"]
+bg_color = Color(1, 1, 1, 1)
+
+[node name="Player" type="CharacterBody3D" groups=["player"]]
+script = ExtResource("1_yuleg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_w65l1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_vhqd1")
+
+[node name="camera_pivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35204, 0)
+
+[node name="Camera3D" type="Camera3D" parent="camera_pivot"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.34938, 0)
+top_level = true
+cull_mask = 1048573
+current = true
+script = ExtResource("2_mr7xn")
+
+[node name="RayCast3D" type="RayCast3D" parent="camera_pivot/Camera3D"]
+target_position = Vector3(0, 0, -100)
+collide_with_areas = true
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel" type="Panel" parent="CenterContainer"]
+custom_minimum_size = Vector2(4, 4)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_753co")
